@@ -1,0 +1,31 @@
+{
+  "name": "audio-rms",
+  "version": "0.0.0",
+  "description": "Connect a Web Audio API AudioNode and stream out the realtime RMS audio level.",
+  "main": "index.js",
+  "scripts": {
+    "test": "beefy example.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mmckegg/audio-rms.git"
+  },
+  "keywords": [
+    "level",
+    "meter",
+    "vu",
+    "rms",
+    "waapi",
+    "audio",
+    "AudioNode"
+  ],
+  "author": "Matt McKegg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmckegg/audio-rms/issues"
+  },
+  "homepage": "https://github.com/mmckegg/audio-rms",
+  "dependencies": {
+    "readable-stream": "^1.0.27-1"
+  }
+}
