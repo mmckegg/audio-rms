@@ -13,7 +13,7 @@ function AudioRms(audioContext){
 
   this.context = audioContext
   this.input = audioContext.createGain()
-  this._meter = this.context.createScriptProcessor(512*4, 2, 2)
+  this._meter = this.context.createScriptProcessor(512*2, 2, 2)
   this.input.connect(this._meter)
 
   var lastL = 0
