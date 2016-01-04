@@ -1,40 +1,36 @@
-var inherits = require('util').inherits;
-var Readable = require('readable-stream').Readable;
+var inherits = require('util').inherits
+var Readable = require('readable-stream').Readable
 
 module.exports = AudioRms
 
-function AudioRms(audioContext){
+function AudioRms (audioContext) {
   if (!(this instanceof AudioRms)) {
-    return new AudioRms(audioContext);
+    return new AudioRms(audioContext)
   }
-  Readable.call(this, { objectMode: true });
+  Readable.call(this, { objectMode: true })
 
   var self = this
 
   this.context = audioContext
   this.input = audioContext.createGain()
-  this._meter = this.context.createScriptProcessor(512*2, 2, 2)
+  this._meter = this.context.createScriptProcessor(512 * 2, 2, 2)
   this.input.connect(this._meter)
 
   var lastL = 0
   var lastR = 0
+  var smoothing = 0.8
 
-  this._processAudio = function(e){
+  this._processAudio = function (e) {
     var rmsL = 0
     var rmsR = 0
 
     var inputL = e.inputBuffer.getChannelData(0)
     var inputR = e.inputBuffer.getChannelData(1)
 
-    for (var i = 0, ii = e.inputBuffer.length; i < ii; i++) {
-      rmsL += (inputL[i] * inputL[i]) / 2
-      rmsR += (inputR[i] * inputR[i]) / 2
-    }
+    rmsL = Math.max(rms(inputL), lastL * smoothing)
+    rmsR = Math.max(rms(inputR), lastR * smoothing)
 
-    rmsL = Math.sqrt(rmsL) / 10
-    rmsR = Math.sqrt(rmsR) / 10
-
-    if (rmsL != lastL || rmsR != lastR){
+    if (rmsL !== lastL || rmsR !== lastR) {
       self.push([rmsL, rmsR])
       lastL = rmsL
       lastR = rmsR
@@ -42,14 +38,23 @@ function AudioRms(audioContext){
   }
 
   this._meter.connect(audioContext.destination)
-
 }
 
-inherits(AudioRms, Readable);
+inherits(AudioRms, Readable)
 
+function rms (input) {
+  var sum = 0
+  var total = 0
+  for (var i = 0; i < input.length; i++) {
+    var x = input[i]
+    total += x
+    sum += x * x
+  }
+  return Math.sqrt(sum / input.length)
+}
 
-AudioRms.prototype._read = function(e){
-  if (!this._meter.onaudioprocess){
+AudioRms.prototype._read = function (e) {
+  if (!this._meter.onaudioprocess) {
     this._meter.onaudioprocess = this._processAudio
   }
 }
