@@ -21,15 +21,10 @@ function AudioRms (audioContext) {
   var smoothing = 0.8
 
   this._processAudio = function (e) {
-    var rmsL = 0
-    var rmsR = 0
-
     var inputL = e.inputBuffer.getChannelData(0)
     var inputR = e.inputBuffer.getChannelData(1)
-
-    rmsL = Math.max(rms(inputL), lastL * smoothing)
-    rmsR = Math.max(rms(inputR), lastR * smoothing)
-
+    var rmsL = Math.max(rms(inputL), lastL * smoothing)
+    var rmsR = Math.max(rms(inputR), lastR * smoothing)
     if (rmsL !== lastL || rmsR !== lastR) {
       self.push([rmsL, rmsR])
       lastL = rmsL
