@@ -1,6 +1,6 @@
 {
   "name": "audio-rms",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Connect a Web Audio API AudioNode and stream out the realtime RMS audio level.",
   "main": "index.js",
   "scripts": {
