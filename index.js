@@ -44,11 +44,8 @@ inherits(AudioRms, Readable)
 
 function rms (input) {
   var sum = 0
-  var total = 0
   for (var i = 0; i < input.length; i++) {
-    var x = input[i]
-    total += x
-    sum += x * x
+    sum += input[i] * input[i]
   }
   return Math.sqrt(sum / input.length)
 }
